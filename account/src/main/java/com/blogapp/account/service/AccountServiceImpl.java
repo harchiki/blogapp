@@ -3,10 +3,10 @@ package com.blogapp.account.service;
 
 import com.blogapp.account.dto.AccountDto;
 import com.blogapp.account.entity.Account;
-import com.blogapp.account.exception.EntityAlreadyExistsException;
-import com.blogapp.account.exception.ResourceNotFoundException;
 import com.blogapp.account.repository.AccountRepository;
 
+import com.blogapp.exception.EntityAlreadyExistsException;
+import com.blogapp.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.modelmapper.ModelMapper;

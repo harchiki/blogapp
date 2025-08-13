@@ -1,7 +1,7 @@
-package com.blogapp.account.controller;
+package com.blogapp.post.controller;
 
-import com.blogapp.account.dto.AccountDto;
-import com.blogapp.account.service.AccountService;
+import com.blogapp.post.dto.PostDto;
+import com.blogapp.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,33 +14,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/post")
 @RequiredArgsConstructor
-public class AccountController {
-    private final AccountService accountService;
+public class PostController {
+    private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<Void> createAccount(@RequestBody AccountDto accountDto) {
-        accountService.createAccount(accountDto);
+    public ResponseEntity<Void> createPost(@RequestBody PostDto postDto) {
+        postService.createPost(postDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAccount(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
-        accountService.updateAccount(id, accountDto);
+    public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @RequestBody PostDto postDto) {
+        postService.updatePost(id, postDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> findPostById(@PathVariable("id") Long id) {
-        AccountDto account = accountService.findAccount(id);
+    public ResponseEntity<PostDto> findPostById(@PathVariable("id") Long id) {
+        PostDto account = postService.findPost(id);
         return ResponseEntity.ok(account);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable("id") Long id) {
-        accountService.delete(id);
+    public ResponseEntity<Void> deletePost(@PathVariable("id") Long id) {
+        postService.delete(id);
         return ResponseEntity.ok().build();
     }
-
 }

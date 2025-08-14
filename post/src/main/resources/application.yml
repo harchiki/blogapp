@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: post
+  config:
+    import: "optional:configserver:http://localhost:8083/"
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver

@@ -20,6 +20,21 @@ spring:
         ddl-auto: update
       show-sql: true
 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "post"
+    description: "Post Service for Blog Application"
+    version: "1.0.0"
+
 management:
   endpoints:
     web:
@@ -34,3 +49,8 @@ management:
     health:
       probes:
         enabled: true
+    shutdown:
+      access: unrestricted
+  info:
+    env:
+      enabled: true

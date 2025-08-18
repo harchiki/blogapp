@@ -1,0 +1,61 @@
+services:
+  configserver:
+    image: "sametyildiz/configserver:1.0.0"
+    container_name: configserver-ms
+    ports:
+      - "8083:8083"
+    healthcheck:
+      test: "curl --fail --silent localhost:8083/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  account:
+    image: "sametyildiz/account:1.0.0"
+    container_name: account-ms
+    ports:
+      - "8080:8080"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "account"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  post:
+    image: "sametyildiz/post:1.0.0"
+    container_name: post-ms
+    ports:
+      - "8081:8081"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "post"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  comment:
+    image: "sametyildiz/comment:1.0.0"
+    container_name: comment-ms
+    ports:
+      - "8082:8082"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "comment"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+networks:
+  post-application:
+    driver: "bridge"

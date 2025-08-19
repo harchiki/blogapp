@@ -2,11 +2,13 @@ package com.blogapp.post.service;
 
 import com.blogapp.exception.EntityAlreadyExistsException;
 import com.blogapp.exception.ResourceNotFoundException;
+import com.blogapp.post.dto.AccountDto;
 import com.blogapp.post.dto.CommentDto;
 import com.blogapp.post.dto.PostDetailDto;
 import com.blogapp.post.dto.PostDto;
 import com.blogapp.post.entity.Post;
 import com.blogapp.post.repository.PostRepository;
+import com.blogapp.post.service.client.AccountFeignClient;
 import com.blogapp.post.service.client.CommentFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CommentFeignClient commentFeignClient;
+    private final AccountFeignClient accountFeignClient;
     private final ModelMapper modelMapper = new ModelMapper();
 
 
@@ -63,8 +66,11 @@ public class PostServiceImpl implements PostService {
 
         modelMapper.map(post, postDto);
 
-        ResponseEntity<List<CommentDto>> responseEntity = commentFeignClient.getComments(id);
-        postDto.setComments(responseEntity.getBody());
+        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccount(post.getWriterId());
+        postDto.setWriter(accountResponse.getBody());
+
+        ResponseEntity<List<CommentDto>> commentResponse = commentFeignClient.getComments(id);
+        postDto.setComments(commentResponse.getBody());
 
         return postDto;
     }

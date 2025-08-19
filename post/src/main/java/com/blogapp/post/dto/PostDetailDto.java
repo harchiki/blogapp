@@ -1,8 +1,6 @@
 package com.blogapp.post.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +15,7 @@ public class PostDetailDto {
 
     private String content;
 
-    private long writerId;
+    private AccountDto writer;
 
     private LocalDateTime createdAt;
 

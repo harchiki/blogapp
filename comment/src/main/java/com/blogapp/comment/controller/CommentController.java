@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comment")
 @RequiredArgsConstructor
@@ -34,6 +36,12 @@ public class CommentController {
     @GetMapping("/{id}")
     public ResponseEntity<CommentDto> findPostById(@PathVariable("id") Long id) {
         CommentDto comment = commentService.findComment(id);
+        return ResponseEntity.ok(comment);
+    }
+
+    @GetMapping("/by-post/{post-id}")
+    ResponseEntity<List<CommentDto>> getCommentByPostId(@PathVariable("post-id") Long postId) {
+        List<CommentDto> comment = commentService.findCommentByPostId(postId);
         return ResponseEntity.ok(comment);
     }
 

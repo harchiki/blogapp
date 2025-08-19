@@ -7,8 +7,10 @@ import com.blogapp.exception.EntityAlreadyExistsException;
 import com.blogapp.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +50,12 @@ public class CommentServiceImpl implements CommentService {
 
         modelMapper.map(comment, commentDto);
         return commentDto;
+    }
+
+    @Override
+    public List<CommentDto> findCommentByPostId(Long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return modelMapper.map(comments, new TypeToken<List<CommentDto>>() {}.getType());
     }
 
     @Override

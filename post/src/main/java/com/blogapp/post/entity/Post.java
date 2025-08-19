@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Post {
+public class Post extends CreateUpdateInfo {
     @Id
     private Long id;
 

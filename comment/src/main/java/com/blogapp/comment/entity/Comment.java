@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Comment {
+public class Comment extends CreateUpdateInfo{
     @Id
     private long id;
 

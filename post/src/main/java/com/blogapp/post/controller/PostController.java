@@ -1,5 +1,6 @@
 package com.blogapp.post.controller;
 
+import com.blogapp.post.dto.PostDetailDto;
 import com.blogapp.post.dto.PostDto;
 import com.blogapp.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,14 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> findPostById(@PathVariable("id") Long id) {
-        PostDto account = postService.findPost(id);
-        return ResponseEntity.ok(account);
+        PostDto post = postService.findPost(id);
+        return ResponseEntity.ok(post);
+    }
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<PostDetailDto> viewPostById(@PathVariable("id") Long id) {
+        PostDetailDto post = postService.viewPost(id);
+        return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("/{id}")

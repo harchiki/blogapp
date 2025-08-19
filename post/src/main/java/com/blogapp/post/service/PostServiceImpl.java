@@ -2,19 +2,25 @@ package com.blogapp.post.service;
 
 import com.blogapp.exception.EntityAlreadyExistsException;
 import com.blogapp.exception.ResourceNotFoundException;
+import com.blogapp.post.dto.CommentDto;
+import com.blogapp.post.dto.PostDetailDto;
 import com.blogapp.post.dto.PostDto;
 import com.blogapp.post.entity.Post;
 import com.blogapp.post.repository.PostRepository;
+import com.blogapp.post.service.client.CommentFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final CommentFeignClient commentFeignClient;
     private final ModelMapper modelMapper = new ModelMapper();
 
 
@@ -46,6 +52,20 @@ public class PostServiceImpl implements PostService {
         PostDto postDto = new PostDto();
 
         modelMapper.map(post, postDto);
+        return postDto;
+    }
+
+    @Override
+    public PostDetailDto viewPost(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+
+        PostDetailDto postDto = new PostDetailDto();
+
+        modelMapper.map(post, postDto);
+
+        ResponseEntity<List<CommentDto>> responseEntity = commentFeignClient.getComments(id);
+        postDto.setComments(responseEntity.getBody());
+
         return postDto;
     }
 

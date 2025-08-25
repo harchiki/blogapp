@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient("COMMENT")
+@FeignClient(value = "COMMENT", fallback = CommentFallback.class)
 public interface CommentFeignClient {
     @GetMapping(value = "/comment/by-post/{post-id}", consumes = "application/json")
     ResponseEntity<List<CommentDto>> getComments(@PathVariable("post-id") Long postId);

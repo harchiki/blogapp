@@ -67,10 +67,12 @@ public class PostServiceImpl implements PostService {
         modelMapper.map(post, postDto);
 
         ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccount(post.getWriterId());
-        postDto.setWriter(accountResponse.getBody());
+        Optional.ofNullable(accountResponse)
+                .ifPresent(res -> postDto.setWriter(res.getBody()));
 
         ResponseEntity<List<CommentDto>> commentResponse = commentFeignClient.getComments(id);
-        postDto.setComments(commentResponse.getBody());
+        Optional.ofNullable(commentResponse)
+                .ifPresent(res -> postDto.setComments(res.getBody()));
 
         return postDto;
     }

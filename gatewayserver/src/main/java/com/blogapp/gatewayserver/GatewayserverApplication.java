@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+
+import java.time.Duration;
 
 @SpringBootApplication
 public class GatewayserverApplication {
@@ -43,9 +46,10 @@ public class GatewayserverApplication {
                 .route(p -> p
                         .path("/blogapp/comment/serviceInfo")
                         .filters(f -> f.setPath("/serviceInfo")
-                                .circuitBreaker(config ->
-                                        config.setName("accountInfoCircuitBreaker")
-                                                .setFallbackUri("forward:/contactSupport")))
+                                .retry(config ->
+                                        config.setRetries(3)
+                                                .setMethods(HttpMethod.GET)
+                                                .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000),  2, true)))
                         .uri("lb://COMMENT"))
                 .route(p -> p
                         .path("/blogapp/comment", "/blogapp/comment/**")

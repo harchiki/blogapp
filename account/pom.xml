@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.blogapp</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.0</version>
+            <version>${common-lib.version}</version>
         </dependency>
 
 		<dependency>

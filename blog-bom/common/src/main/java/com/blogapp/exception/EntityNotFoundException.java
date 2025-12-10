@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
 
-    public ResourceNotFoundException() {
+    public EntityNotFoundException() {
         super("Entity Not Found");
     }
 
-    public ResourceNotFoundException(String message) {
+    public EntityNotFoundException(String message) {
         super(message);
     }
 }

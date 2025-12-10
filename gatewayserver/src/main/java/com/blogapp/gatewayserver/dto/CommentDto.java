@@ -1,8 +1,6 @@
-package com.blogapp.post.dto;
+package com.blogapp.gatewayserver.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +9,7 @@ public class CommentDto {
 
     private long id;
 
-    private long writerId;
+    private String writerNickname;
 
     private long postId;
 

@@ -6,7 +6,7 @@ import com.blogapp.account.entity.Account;
 import com.blogapp.account.repository.AccountRepository;
 
 import com.blogapp.exception.EntityAlreadyExistsException;
-import com.blogapp.exception.ResourceNotFoundException;
+import com.blogapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.modelmapper.ModelMapper;
@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void updateAccount(Long id, AccountDto accountDto) {
-        Account account = accountRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Account account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         account.setEmail(accountDto.getEmail());
         account.setNickname(accountDto.getNickname());
 
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountDto findAccount(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Account account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         AccountDto accountDto = new AccountDto();
 
         modelMapper.map(account, accountDto);
@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public AccountDto findAccount(String nickname) {
-        Account account = accountRepository.findByNickname(nickname).orElseThrow(ResourceNotFoundException::new);
+        Account account = accountRepository.findByNickname(nickname).orElseThrow(EntityNotFoundException::new);
         AccountDto accountDto = new AccountDto();
 
         modelMapper.map(account, accountDto);
@@ -63,7 +63,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void delete(Long id) {
-        Account account = accountRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Account account = accountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         accountRepository.delete(account);
     }
 }

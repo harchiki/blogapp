@@ -4,7 +4,7 @@ import com.blogapp.comment.dto.CommentDto;
 import com.blogapp.comment.entity.Comment;
 import com.blogapp.comment.repository.CommentRepository;
 import com.blogapp.exception.EntityAlreadyExistsException;
-import com.blogapp.exception.ResourceNotFoundException;
+import com.blogapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(Long id, CommentDto commentDto) {
-        Comment comment = commentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Comment comment = commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         comment.setContent(commentDto.getContent());
         comment.setPostId(commentDto.getPostId());
         comment.setNickname(commentDto.getNickname());
@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto findComment(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Comment comment = commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         CommentDto commentDto = new CommentDto();
 
         modelMapper.map(comment, commentDto);
@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void delete(Long id) {
-        Comment comment = commentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Comment comment = commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         commentRepository.delete(comment);
     }
 }

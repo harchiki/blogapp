@@ -1,4 +1,4 @@
-package com.blogapp.post.dto;
+package com.blogapp.gatewayserver.dto;
 
 import lombok.Data;
 

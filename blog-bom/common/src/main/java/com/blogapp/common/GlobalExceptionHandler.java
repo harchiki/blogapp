@@ -2,7 +2,8 @@ package com.blogapp.common;
 
 import com.blogapp.dto.ErrorResponseDto;
 import com.blogapp.exception.EntityAlreadyExistsException;
-import com.blogapp.exception.ResourceNotFoundException;
+import com.blogapp.exception.InvalidInputException;
+import com.blogapp.exception.EntityNotFoundException;
 import com.blogapp.exception.RetryException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,20 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException exception,
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(InvalidInputException exception,
+                                                                            WebRequest webRequest) {
+        ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(EntityNotFoundException exception,
                                                                             WebRequest webRequest) {
         ErrorResponseDto errorResponseDTO = new ErrorResponseDto(
                 webRequest.getDescription(false),

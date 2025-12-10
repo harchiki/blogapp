@@ -66,7 +66,7 @@ public class PostServiceImpl implements PostService {
 
         modelMapper.map(post, postDto);
 
-        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccount(post.getWriterId());
+        ResponseEntity<AccountDto> accountResponse = accountFeignClient.getAccountByNickname(post.getNickname());
         Optional.ofNullable(accountResponse)
                 .ifPresent(res -> postDto.setWriter(res.getBody()));
 

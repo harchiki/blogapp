@@ -21,6 +21,9 @@ public class Post extends CreateUpdateInfo {
 
     private String content;
 
+    /**
+     * writer of the post
+     */
     @Column(nullable = false)
-    private long writerId;
+    private String nickname;
 }

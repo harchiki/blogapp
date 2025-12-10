@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AccountFallback implements AccountFeignClient {
     @Override
-    public ResponseEntity<AccountDto> getAccount(Long id) {
-        log.warn("Invoked fallback method of getAccount");
+    public ResponseEntity<AccountDto> getAccountByNickname(String nickname) {
+        log.warn("Invoked fallback method of getAccountByNickname");
         return null;
     }
 }

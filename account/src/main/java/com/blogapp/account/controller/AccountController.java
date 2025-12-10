@@ -31,9 +31,9 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> findPostById(@PathVariable("id") Long id) {
-        AccountDto account = accountService.findAccount(id);
+    @GetMapping("/{nickname}")
+    public ResponseEntity<AccountDto> findPostById(@PathVariable("nickname") String nickname) {
+        AccountDto account = accountService.findAccount(nickname);
         return ResponseEntity.ok(account);
     }
 

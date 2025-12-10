@@ -1,5 +1,6 @@
 package com.blogapp.comment.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -14,7 +15,11 @@ public class Comment extends CreateUpdateInfo{
     @Id
     private long id;
 
-    private long writerId;
+    /**
+     * writer of the post
+     */
+    @Column(nullable = false)
+    private String nickname;
 
     private long postId;
 

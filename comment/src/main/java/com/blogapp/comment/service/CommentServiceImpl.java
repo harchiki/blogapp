@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         comment.setContent(commentDto.getContent());
         comment.setPostId(commentDto.getPostId());
-        comment.setWriterId(commentDto.getWriterId());
+        comment.setNickname(commentDto.getNickname());
 
         commentRepository.save(comment);
     }

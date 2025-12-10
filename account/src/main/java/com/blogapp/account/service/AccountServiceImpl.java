@@ -53,6 +53,15 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public AccountDto findAccount(String nickname) {
+        Account account = accountRepository.findByNickname(nickname).orElseThrow(ResourceNotFoundException::new);
+        AccountDto accountDto = new AccountDto();
+
+        modelMapper.map(account, accountDto);
+        return accountDto;
+    }
+
+    @Override
     public void delete(Long id) {
         Account account = accountRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         accountRepository.delete(account);

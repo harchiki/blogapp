@@ -1,4 +1,4 @@
-package com.blogapp.account.dto;
+package com.blogapp.user.dto;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -1,6 +1,6 @@
-package com.blogapp.account.controller;
+package com.blogapp.user.controller;
 
-import com.blogapp.account.dto.ServiceInfoDto;
+import com.blogapp.user.dto.ServiceInfoDto;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;

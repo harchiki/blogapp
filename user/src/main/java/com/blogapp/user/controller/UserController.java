@@ -1,7 +1,7 @@
-package com.blogapp.account.controller;
+package com.blogapp.user.controller;
 
-import com.blogapp.account.dto.AccountDto;
-import com.blogapp.account.service.AccountService;
+import com.blogapp.user.dto.UserDto;
+import com.blogapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,32 +14,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/user")
 @RequiredArgsConstructor
-public class AccountController {
-    private final AccountService accountService;
+public class UserController {
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<Void> createAccount(@RequestBody AccountDto accountDto) {
-        accountService.createAccount(accountDto);
+    public ResponseEntity<Void> createUser(@RequestBody UserDto userDto) {
+        userService.createUser(userDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateAccount(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
-        accountService.updateAccount(id, accountDto);
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+        userService.updateUser(id, userDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{nickname}")
-    public ResponseEntity<AccountDto> findPostById(@PathVariable("nickname") String nickname) {
-        AccountDto account = accountService.findAccount(nickname);
-        return ResponseEntity.ok(account);
+    public ResponseEntity<UserDto> findPostById(@PathVariable("nickname") String nickname) {
+        UserDto user = userService.findUser(nickname);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable("id") Long id) {
-        accountService.delete(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        userService.delete(id);
         return ResponseEntity.ok().build();
     }
 

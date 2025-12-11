@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: account
+    name: user
 #  profiles:
 #    active: qa
   config:
@@ -33,8 +33,8 @@ eureka:
 
 info:
   app:
-    name: "account"
-    description: "Account Service for Blog Application"
+    name: "user"
+    description: "User Service for Blog Application"
     version: "1.0.0"
 
 management:

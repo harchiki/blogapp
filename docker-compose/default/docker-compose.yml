@@ -34,16 +34,16 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
 
-  account:
-    image: "sametyildiz/account:1.0.0"
-    container_name: account-ms
+  user:
+    image: "sametyildiz/user:1.0.0"
+    container_name: user-ms
     ports:
       - "8080:8080"
     depends_on:
       eureka:
         condition: service_healthy
     environment:
-      SPRING_APPLICATION_NAME: "account"
+      SPRING_APPLICATION_NAME: "user"
     extends:
       file: common-config.yml
       service: microservice-eureka-config

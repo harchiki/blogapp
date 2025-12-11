@@ -1,9 +1,9 @@
-package com.blogapp.account.dto;
+package com.blogapp.user.dto;
 
 import lombok.Data;
 
 @Data
-public class AccountDto {
+public class UserDto {
     private Long id;
 
     private String nickname;

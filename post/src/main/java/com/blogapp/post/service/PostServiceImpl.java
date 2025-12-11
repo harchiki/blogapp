@@ -26,10 +26,10 @@ public class PostServiceImpl implements PostService {
             throw new EntityAlreadyExistsException();
         }
 
-        Post newAccount = new Post();
-        modelMapper.map(postDto, newAccount);
+        Post post = new Post();
+        modelMapper.map(postDto, post);
 
-        postRepository.save(newAccount);
+        postRepository.save(post);
     }
 
     @Override

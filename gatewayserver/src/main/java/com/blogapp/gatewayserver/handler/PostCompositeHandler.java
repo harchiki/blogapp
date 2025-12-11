@@ -2,7 +2,7 @@ package com.blogapp.gatewayserver.handler;
 
 import com.blogapp.exception.InvalidInputException;
 import com.blogapp.exception.EntityNotFoundException;
-import com.blogapp.gatewayserver.dto.AccountDto;
+import com.blogapp.gatewayserver.dto.UserDto;
 import com.blogapp.gatewayserver.dto.CommentDto;
 import com.blogapp.gatewayserver.dto.PostDetailDto;
 import com.blogapp.gatewayserver.dto.PostDto;
@@ -38,25 +38,25 @@ public class PostCompositeHandler {
                             .getNickname();
 
                     // retrieve writer
-                    Mono<ResponseEntity<AccountDto>> accountMono = postFetchingClient.fetchAccount(writerNickname);
+                    Mono<ResponseEntity<UserDto>> userMono = postFetchingClient.fetchUser(writerNickname);
 
                     // comments
                     Mono<ResponseEntity<List<CommentDto>>> commentsMono = postFetchingClient.fetchComments(id);
 
                     return Mono.zip(
                             postDto,
-                            accountMono,
+                            userMono,
                             commentsMono
                     );
                 })
                 .flatMap(tuple -> {
                     PostDto post = tuple.getT1().getBody();
-                    AccountDto account = tuple.getT2().getBody();
+                    UserDto user = tuple.getT2().getBody();
                     List<CommentDto> comments = tuple.getT3().getBody();
 
                     PostDetailDto detail = new PostDetailDto();
                     modelMapper.map(post, detail);
-                    detail.setWriter(account);
+                    detail.setWriter(user);
                     detail.setComments(comments);
 
                     return ServerResponse.ok()

@@ -3,7 +3,7 @@ package com.blogapp.gatewayserver.dto;
 import lombok.Data;
 
 @Data
-public class AccountDto {
+public class UserDto {
     private Long id;
 
     private String nickname;

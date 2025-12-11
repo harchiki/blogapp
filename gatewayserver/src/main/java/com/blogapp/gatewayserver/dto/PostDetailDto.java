@@ -15,7 +15,7 @@ public class PostDetailDto {
 
     private String content;
 
-    private AccountDto writer;
+    private UserDto writer;
 
     private LocalDateTime createdAt;
 

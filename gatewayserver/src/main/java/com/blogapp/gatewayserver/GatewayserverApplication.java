@@ -20,22 +20,22 @@ public class GatewayserverApplication {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(p -> p
-                        .path("/blogapp/account/serviceInfo")
+                        .path("/blogapp/user/serviceInfo")
                         .filters(f -> f.setPath("/serviceInfo")
                                 .circuitBreaker(config ->
-                                        config.setName("accountInfoCircuitBreaker")
+                                        config.setName("userInfoCircuitBreaker")
                                                 .setFallbackUri("forward:/contactSupport")))
-                        .uri("lb://ACCOUNT"))
+                        .uri("lb://USER"))
                 .route(p -> p
-                        .path("/blogapp/account", "/blogapp/account/**")
+                        .path("/blogapp/user", "/blogapp/user/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("lb://ACCOUNT"))
+                        .uri("lb://USER"))
 
                 .route(p -> p
                         .path("/blogapp/post/serviceInfo")
                         .filters(f -> f.setPath("/serviceInfo")
                                 .circuitBreaker(config ->
-                                        config.setName("accountInfoCircuitBreaker")
+                                        config.setName("userInfoCircuitBreaker")
                                                 .setFallbackUri("forward:/contactSupport")))
                         .uri("lb://POST"))
                 .route(p -> p

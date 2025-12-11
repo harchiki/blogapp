@@ -1,6 +1,6 @@
 package com.blogapp.gatewayserver.service.client;
 
-import com.blogapp.gatewayserver.dto.AccountDto;
+import com.blogapp.gatewayserver.dto.UserDto;
 import com.blogapp.gatewayserver.dto.CommentDto;
 import com.blogapp.gatewayserver.dto.PostDto;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public interface PostFetchingClient {
     Mono<ResponseEntity<PostDto>> fetchPost(@PathVariable("id") Long id);
 
 
-    @GetExchange(value= "/blogapp/account/{nickname}", accept = "application/json")
-    Mono<ResponseEntity<AccountDto>> fetchAccount(@PathVariable("nickname") String nickname);
+    @GetExchange(value= "/blogapp/user/{nickname}", accept = "application/json")
+    Mono<ResponseEntity<UserDto>> fetchUser(@PathVariable("nickname") String nickname);
 
 
     @GetExchange(value= "/blogapp/comment/by-post/{post-id}", accept = "application/json")

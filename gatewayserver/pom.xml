@@ -59,6 +59,7 @@
 			<artifactId>common</artifactId>
 			<version>${common-lib.version}</version>
 			<exclusions>
+			<!--		blocking WebFluxProperties auto initialization		-->
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-web</artifactId>

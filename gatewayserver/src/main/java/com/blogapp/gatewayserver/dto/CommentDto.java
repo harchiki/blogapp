@@ -9,7 +9,7 @@ public class CommentDto {
 
     private long id;
 
-    private String writerNickname;
+    private String nickname;
 
     private long postId;
 

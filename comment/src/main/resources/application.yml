@@ -19,6 +19,21 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+  cloud:
+    function:
+      definition: updateCommentNickname
+    stream:
+      bindings:
+        updateCommentNickname-in-0:
+          destination: update-comment-nickname
+          group: ${spring.application.name}
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
 
 eureka:
   instance:

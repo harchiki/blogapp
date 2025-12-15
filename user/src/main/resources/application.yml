@@ -21,6 +21,19 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
+  cloud:
+#    function:
+#      definition: rollbackUserNickname
+    stream:
+      bindings:
+        updatePostNickname-out-0:
+          destination: update-post-nickname
 
 eureka:
   instance:

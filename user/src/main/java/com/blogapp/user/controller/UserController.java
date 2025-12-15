@@ -1,11 +1,14 @@
 package com.blogapp.user.controller;
 
 import com.blogapp.user.dto.UserDto;
+import com.blogapp.user.dto.UserEmailDto;
+import com.blogapp.user.dto.UpdateNicknameDto;
 import com.blogapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,9 +28,15 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
-        userService.updateUser(id, userDto);
+    @PutMapping("/update/email")
+    public ResponseEntity<Void> updateUser(@RequestBody UserEmailDto userDto) {
+        userService.updateUserEmail(userDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/update/nickname")
+    public ResponseEntity<Void> updateUser(@RequestBody UpdateNicknameDto userDto) {
+        userService.updateUserNickname(userDto);
         return ResponseEntity.ok().build();
     }
 

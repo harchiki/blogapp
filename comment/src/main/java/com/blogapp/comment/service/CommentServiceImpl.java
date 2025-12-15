@@ -1,11 +1,13 @@
 package com.blogapp.comment.service;
 
 import com.blogapp.comment.dto.CommentDto;
+import com.blogapp.comment.dto.UpdateNicknameDto;
 import com.blogapp.comment.entity.Comment;
 import com.blogapp.comment.repository.CommentRepository;
 import com.blogapp.exception.EntityAlreadyExistsException;
 import com.blogapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper = new ModelMapper();
@@ -31,6 +34,21 @@ public class CommentServiceImpl implements CommentService {
         modelMapper.map(commentDto, newComment);
 
         commentRepository.save(newComment);
+    }
+
+
+    @Override
+    public void updateCommentNickname(UpdateNicknameDto nicknameDto) {
+        List<Comment> comments = commentRepository.findByNickname(nicknameDto.getOldNickname());
+
+        if (!comments.isEmpty()) {
+            comments.forEach(comment -> comment.setNickname(nicknameDto.getNewNickname()));
+
+            commentRepository.saveAll(comments);
+            log.info("Updated all comments with new nickname : {}", nicknameDto.getNewNickname());
+        } else {
+            log.info("No comment to be updated with new nickname");
+        }
     }
 
     @Override

@@ -23,6 +23,23 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+    function:
+      definition: updatePostNickname
+    stream:
+      bindings:
+        updatePostNickname-in-0:
+          destination: update-post-nickname
+          group: ${spring.application.name}
+        updateCommentNickname-out-0:
+          destination: update-comment-nickname
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 10s
+
 
 resilience4j.circuitbreaker:
   configs:

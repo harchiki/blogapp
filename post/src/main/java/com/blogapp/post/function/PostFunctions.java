@@ -18,4 +18,12 @@ public class PostFunctions {
             postService.updatePostNickname(updateNickname);
         };
     }
+
+    @Bean
+    public Consumer<UpdateNicknameDto> rollbackPostNickname(PostService postService) {
+        return updateNickname -> {
+            log.info("Received rollbackPostNickname request for the details: {}", updateNickname);
+            postService.rollbackPostNickname(updateNickname);
+        };
+    }
 }

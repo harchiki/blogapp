@@ -28,12 +28,15 @@ spring:
     password: guest
     connection-timeout: 10s
   cloud:
-#    function:
-#      definition: rollbackUserNickname
+    function:
+      definition: rollbackUserNickname
     stream:
       bindings:
         updatePostNickname-out-0:
           destination: update-post-nickname
+        rollbackUserNickname-in-0:
+          destination: rollback-user-nickname
+          group: ${spring.application.name}
 
 eureka:
   instance:

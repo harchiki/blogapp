@@ -11,4 +11,5 @@ public interface UserService {
     UserDto findUser(Long id);
     UserDto findUser(String nickname);
     void delete(Long id);
+    void rollbackUserNickname(UpdateNicknameDto updateNickname);
 }

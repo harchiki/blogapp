@@ -27,6 +27,8 @@ spring:
         updateCommentNickname-in-0:
           destination: update-comment-nickname
           group: ${spring.application.name}
+        rollbackPostNickname-out-0:
+          destination: rollback-post-nickname
 
   rabbitmq:
     host: localhost

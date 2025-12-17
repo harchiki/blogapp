@@ -56,6 +56,15 @@ public class UserServiceImpl implements UserService {
         updatePostNickname(nicknameDto);
     }
 
+    @Override
+    public void rollbackUserNickname(UpdateNicknameDto updateNickname) {
+        // retrieve the one just updated with newNickname
+        User user = userRepository.findByNickname(updateNickname.getNewNickname()).orElseThrow(EntityNotFoundException::new);
+        user.setNickname(updateNickname.getOldNickname());
+
+        userRepository.save(user);
+    }
+
     private void updatePostNickname(UpdateNicknameDto nicknameDto) {
         log.info("Sending updatePostNickname request for the details: {}", nicknameDto);
         var result = bridge.send("updatePostNickname-out-0",nicknameDto);

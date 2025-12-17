@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +24,8 @@ import java.util.Optional;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper = new ModelMapper();
-    
+    private final StreamBridge bridge;
+
     @Override
     public void createComment(CommentDto commentDto) {
         Optional<Comment> optComment = commentRepository.findById(commentDto.getId());
@@ -38,17 +42,30 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
+    @Transactional
     public void updateCommentNickname(UpdateNicknameDto nicknameDto) {
         List<Comment> comments = commentRepository.findByNickname(nicknameDto.getOldNickname());
+        try {
+            if (!comments.isEmpty()) {
+                comments.forEach(comment -> comment.setNickname(nicknameDto.getNewNickname()));
 
-        if (!comments.isEmpty()) {
-            comments.forEach(comment -> comment.setNickname(nicknameDto.getNewNickname()));
-
-            commentRepository.saveAll(comments);
-            log.info("Updated all comments with new nickname : {}", nicknameDto.getNewNickname());
-        } else {
-            log.info("No comment to be updated with new nickname");
+                commentRepository.saveAll(comments);
+                log.info("Updated all comments with new nickname : {}", nicknameDto.getNewNickname());
+            } else {
+                log.info("No comment to be updated with new nickname");
+            }
+        } catch (Exception e) {
+            log.error("Error occurred while updating comments with new nickname : {}, error : {}",
+                    nicknameDto.getNewNickname(), e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            rollbackPostNickname(nicknameDto);
         }
+    }
+
+    private void rollbackPostNickname(UpdateNicknameDto nicknameDto) {
+        log.info("Sending rollbackPostNickname request for the details: {}", nicknameDto);
+        var result = bridge.send("rollbackPostNickname-out-0", nicknameDto);
+        log.info("Is the rollbackCardMobileNumber request successfully triggered ? : {}", result);
     }
 
     @Override

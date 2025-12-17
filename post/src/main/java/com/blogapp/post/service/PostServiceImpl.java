@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,21 +49,50 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void updatePostNickname(UpdateNicknameDto nicknameDto) {
-        List<Post> posts = postRepository.findByNickname(nicknameDto.getOldNickname());
+        try {
+            List<Post> posts = postRepository.findByNickname(nicknameDto.getOldNickname());
+            if (!posts.isEmpty()) {
+                posts.forEach(post -> post.setNickname(nicknameDto.getNewNickname()));
 
-        if (!posts.isEmpty()) {
-            posts.forEach(post -> post.setNickname(nicknameDto.getNewNickname()));
+                postRepository.saveAll(posts);
+                log.info("Updated all posts with new nickname : {}", nicknameDto.getNewNickname());
+            } else {
+                log.info("No post to be updated with new nickname");
+            }
 
-            postRepository.saveAll(posts);
-            log.info("Updated all posts with new nickname : {}", nicknameDto.getNewNickname());
-        } else {
-            log.info("No post to be updated with new nickname");
+            updateCommentNickname(nicknameDto);
+        } catch (Exception e) {
+            log.error("Error occurred while updating posts with new nickname : {}, error : {}",
+                    nicknameDto.getNewNickname(), e.getMessage());
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            rollbackUserNickname(nicknameDto);
         }
-
-        updateCommentNickname(nicknameDto);
     }
 
+    @Override
+    public void rollbackPostNickname(UpdateNicknameDto updateNickname) {
+        // retrieve ones just updated with newNickname
+        List<Post> posts = postRepository.findByNickname(updateNickname.getNewNickname());
+
+        if (!posts.isEmpty()) {
+            posts.forEach(post -> post.setNickname(updateNickname.getOldNickname()));
+
+            postRepository.saveAll(posts);
+            log.info("Rollbacked new nickname on all posts : current nickname : {}", updateNickname.getOldNickname());
+        } else {
+            log.info("No post to rollback with new nickname");
+        }
+
+        rollbackUserNickname(updateNickname);
+    }
+
+    private void rollbackUserNickname(UpdateNicknameDto nicknameDto) {
+        log.info("Sending rollbackUserNickname request for the details: {}", nicknameDto);
+        var result = bridge.send("rollbackUserNickname-out-0", nicknameDto);
+        log.info("Is the rollbackUserNickname request successfully triggered ? : {}", result);
+    }
 
     private void updateCommentNickname(UpdateNicknameDto nicknameDto) {
         log.info("Sending updateCommentNickname request for the details: {}", nicknameDto);

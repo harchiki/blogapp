@@ -59,7 +59,7 @@ logging:
   level:
     com:
       blogapp:
-        gatewayserver: DEBUG
+        gatewayserver: INFO
 
 
 resilience4j.circuitbreaker:

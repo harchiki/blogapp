@@ -2,8 +2,6 @@ services:
   configserver:
     image: "sametyildiz/configserver:1.0.0"
     container_name: configserver-ms
-    ports:
-      - "8083:8083"
     healthcheck:
       test: "curl --fail --silent localhost:8083/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -17,8 +15,6 @@ services:
   eureka:
     image: "sametyildiz/eurekaserver:1.0.0"
     container_name: eureka
-    ports:
-      - "8070:8070"
     healthcheck:
       test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -34,47 +30,98 @@ services:
       file: common-config.yml
       service: microservice-configserver-config
 
+  gateway:
+    image: "sametyildiz/gatewayserver:1.0.0"
+    container_name: gateway
+    ports:
+      - "8072:8072"
+    depends_on:
+      user:
+        condition: service_healthy
+      post:
+        condition: service_healthy
+      comment:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
   user:
     image: "sametyildiz/user:1.0.0"
     container_name: user-ms
-    ports:
-      - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     depends_on:
       eureka:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "user"
     extends:
       file: common-config.yml
-      service: microservice-eureka-config
+      service: microservice-rabbitmq-config
 
   post:
     image: "sametyildiz/post:1.0.0"
     container_name: post-ms
-    ports:
-      - "8081:8081"
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     depends_on:
       eureka:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "post"
     extends:
       file: common-config.yml
-      service: microservice-eureka-config
+      service: microservice-rabbitmq-config
 
   comment:
     image: "sametyildiz/comment:1.0.0"
     container_name: comment-ms
-    ports:
-      - "8082:8082"
+    healthcheck:
+      test: "curl --fail --silent localhost:8082/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     depends_on:
       eureka:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "comment"
     extends:
       file: common-config.yml
-      service: microservice-eureka-config
+      service: microservice-rabbitmq-config
+
+  rabbitmq:
+    image: "rabbitmq:4-management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
 networks:
   post-application:

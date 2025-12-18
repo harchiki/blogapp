@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-public interface PostFetchingClient {
+public interface FetchingClient {
     @GetExchange(value= "/blogapp/post/{id}", accept = "application/json")
     Mono<ResponseEntity<PostDto>> fetchPost(@PathVariable("id") Long id);
 

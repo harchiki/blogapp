@@ -1,12 +1,11 @@
 package com.blogapp.gatewayserver.handler;
 
-import com.blogapp.exception.InvalidInputException;
 import com.blogapp.exception.EntityNotFoundException;
 import com.blogapp.gatewayserver.dto.UserDto;
 import com.blogapp.gatewayserver.dto.CommentDto;
 import com.blogapp.gatewayserver.dto.PostDetailDto;
 import com.blogapp.gatewayserver.dto.PostDto;
-import com.blogapp.gatewayserver.service.client.PostFetchingClient;
+import com.blogapp.gatewayserver.service.client.FetchingClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
@@ -22,13 +21,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class PostCompositeHandler {
-    private final PostFetchingClient postFetchingClient;
+    private final FetchingClient fetchingClient;
     private final ModelMapper modelMapper = new ModelMapper();
 
     public Mono<ServerResponse> fetchPostDetails(ServerRequest serverRequest) {
         String postId = serverRequest.pathVariable("post-id");
         Long id = Long.valueOf(postId);
-        Mono<ResponseEntity<PostDto>> postDto = postFetchingClient.fetchPost(id);
+        Mono<ResponseEntity<PostDto>> postDto = fetchingClient.fetchPost(id);
 
         return postDto
                 .flatMap(postResponse -> {
@@ -38,10 +37,10 @@ public class PostCompositeHandler {
                             .getNickname();
 
                     // retrieve writer
-                    Mono<ResponseEntity<UserDto>> userMono = postFetchingClient.fetchUser(writerNickname);
+                    Mono<ResponseEntity<UserDto>> userMono = fetchingClient.fetchUser(writerNickname);
 
                     // comments
-                    Mono<ResponseEntity<List<CommentDto>>> commentsMono = postFetchingClient.fetchComments(id);
+                    Mono<ResponseEntity<List<CommentDto>>> commentsMono = fetchingClient.fetchComments(id);
 
                     return Mono.zip(
                             postDto,

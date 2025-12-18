@@ -1,6 +1,6 @@
 package com.blogapp.gatewayserver.config;
 
-import com.blogapp.gatewayserver.service.client.PostFetchingClient;
+import com.blogapp.gatewayserver.service.client.FetchingClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +16,11 @@ public class ClientConfig {
 
 
     @Bean
-    PostFetchingClient postFetchingClient() {
+    FetchingClient postFetchingClient() {
         WebClient webClient = WebClient.builder().baseUrl(baseUrl).build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
-        return factory.createClient(PostFetchingClient.class);
+        return factory.createClient(FetchingClient.class);
     }
 
 }

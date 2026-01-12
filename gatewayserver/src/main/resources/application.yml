@@ -13,7 +13,19 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: "http://localhost:8090/realms/blogapp/protocol/openid-connect/certs"
+          issuer-uri: http://localhost:8092
+      client:
+        registration:
+          blogapp:
+            client-id: blogapp-client
+            client-secret: e96b2b65f6bf5b11644a44a5e9dfcf09
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization_code
+          user-register:
+            client-id: register-client
+            client-secret: addb4cb806635cb60e522f4e1752abda
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
   cloud:
     gateway:
       server:

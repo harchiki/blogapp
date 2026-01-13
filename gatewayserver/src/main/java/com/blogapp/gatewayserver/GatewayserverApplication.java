@@ -20,6 +20,14 @@ public class GatewayserverApplication {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(p -> p
+                        .path("/blogapp/user/register")
+                        .filters(f -> f.setPath("/register"))
+                        .uri("lb://AUTHSERVER"))
+                .route(p -> p
+                        .path("/blogapp/user/current-user")
+                        .filters(f -> f.setPath("/current-user"))
+                        .uri("lb://AUTHSERVER"))
+                .route(p -> p
                         .path("/blogapp/user/serviceInfo")
                         .filters(f -> f.setPath("/serviceInfo")
                                 .circuitBreaker(config ->

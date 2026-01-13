@@ -1,8 +1,8 @@
 package com.blogapp.authserver.service;
 
 import com.blogapp.authserver.entity.Role;
-import com.blogapp.authserver.entity.UserInfo;
-import com.blogapp.authserver.repository.UserRepository;
+import com.blogapp.authserver.entity.Credential;
+import com.blogapp.authserver.repository.CredentialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BlogUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final CredentialRepository credentialRepository;
 
     @Override
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
-        UserInfo user = userRepository.findByNickname(nickname).orElseThrow(() -> new
+        Credential user = credentialRepository.findByNickname(nickname).orElseThrow(() -> new
                 UsernameNotFoundException("User details not found for the user: " + nickname));
         List<GrantedAuthority> authorities = user.getRoles().stream().map(authority -> new
                 SimpleGrantedAuthority(Role.USER.name())).collect(Collectors.toList());

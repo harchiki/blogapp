@@ -2,7 +2,7 @@ package com.blogapp.authserver.controller;
 
 import com.blogapp.authserver.dto.UserInfoDto;
 import com.blogapp.authserver.dto.UserRegisterRequestDto;
-import com.blogapp.authserver.service.UserService;
+import com.blogapp.authserver.service.CredentialService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +19,16 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserService userService;
+    private final CredentialService credentialService;
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        userService.registerUser(userRegisterRequestDto);
+        credentialService.registerUser(userRegisterRequestDto);
         log.info("User registered successfully !");
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/currentUser")
+    @GetMapping("/current-user")
     public ResponseEntity<UserInfoDto> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -36,7 +36,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-        UserInfoDto byNickname = userService.findByNickname(authentication.getName());
+        UserInfoDto byNickname = credentialService.findByNickname(authentication.getName());
         return ResponseEntity.ok(byNickname);
     }
 }

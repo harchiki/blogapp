@@ -25,7 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserInfo extends CreateUpdateInfo{
+public class Credential extends CreateUpdateInfo{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

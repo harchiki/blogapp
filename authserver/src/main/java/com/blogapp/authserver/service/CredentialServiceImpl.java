@@ -2,8 +2,8 @@ package com.blogapp.authserver.service;
 
 import com.blogapp.authserver.dto.UserInfoDto;
 import com.blogapp.authserver.dto.UserRegisterRequestDto;
-import com.blogapp.authserver.entity.UserInfo;
-import com.blogapp.authserver.repository.UserRepository;
+import com.blogapp.authserver.entity.Credential;
+import com.blogapp.authserver.repository.CredentialRepository;
 import com.blogapp.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,9 +16,9 @@ import static com.blogapp.authserver.entity.Role.USER;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class CredentialServiceImpl implements CredentialService {
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final CredentialRepository credentialRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
 
@@ -26,18 +26,18 @@ public class UserServiceImpl implements UserService {
     public void registerUser(UserRegisterRequestDto requestDto) {
         String hashPwd = passwordEncoder.encode(requestDto.getPassword());
 
-        UserInfo userInfo = new UserInfo();
-        userInfo.setNickname(requestDto.getNickname());
-        userInfo.setEmail(requestDto.getEmail());
-        userInfo.setPwd(hashPwd);
-        userInfo.setRoles(Set.of(USER));
+        Credential credential = new Credential();
+        credential.setNickname(requestDto.getNickname());
+        credential.setEmail(requestDto.getEmail());
+        credential.setPwd(hashPwd);
+        credential.setRoles(Set.of(USER));
 
-        userRepository.save(userInfo);
+        credentialRepository.save(credential);
     }
 
     @Override
     public UserInfoDto findByNickname(String nickname) {
-        UserInfo userInfo = userRepository.findByNickname(nickname).orElseThrow(EntityNotFoundException::new);
-        return modelMapper.map(userInfo, UserInfoDto.class);
+        Credential credential = credentialRepository.findByNickname(nickname).orElseThrow(EntityNotFoundException::new);
+        return modelMapper.map(credential, UserInfoDto.class);
     }
 }
